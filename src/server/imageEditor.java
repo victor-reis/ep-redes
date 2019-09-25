@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
  * @author pankaj
  */
 
-public class imageEditor {
+class imageEditor {
 
     /**
      * This function resize the image file and returns the BufferedImage object that can be saved to file system.
