@@ -1,35 +1,53 @@
 package client;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 
 class TCPClient {
 
-    public static void main(String argv[ ]) throws Exception
+    public static final int TAMANHO_BUFFER = 4096;
+
+    public static void sendImageToServer(File file) throws Exception
     {
-        String sentence;
-        String modifiedSentence;
+        File f = new File("/home/victor-reis/Pictures/pés.jpg");
+        FileInputStream in = new FileInputStream(f);
 
-        BufferedReader inFromUser =
-                new BufferedReader(new InputStreamReader(System.in));
+        Socket clientSocket = new Socket("localhost", 6789);
 
-        Socket clientSocket = new Socket("hostname", 6789);
 
-        DataOutputStream outToServer =
-                new DataOutputStream(clientSocket.getOutputStream());
-        BufferedReader inFromServer =
-                new BufferedReader(new
-                        InputStreamReader(clientSocket.getInputStream()));
+        OutputStream out = clientSocket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(out);
+//
+//        InputStream inputStream = clientSocket.getInputStream();
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+//
 
-        sentence = inFromUser.readLine();
+        BufferedWriter writer = new BufferedWriter(osw);
+        writer.write(f.getName() + "\n");
+        writer.flush();
 
-        outToServer.writeBytes(sentence + '\n');
+        byte[] buffer = new byte[TAMANHO_BUFFER];
+        int lidos = -1;
+        while ((lidos = in.read(buffer, 0, TAMANHO_BUFFER)) != -1) {
+            out.write(buffer, 0, lidos);
+        }
+        System.out.println("[CLIENT] arquivo enviado");
 
-        modifiedSentence = inFromServer.readLine();
+//        String fName = reader.readLine();
+//        System.out.println(fName);
+//
+//        File f1 = new File("/home/victor-reis/Pictures/pés-server.jpg");
+//        FileOutputStream outputStream = new FileOutputStream(f1);
+//
+//        buffer = new byte[TAMANHO_BUFFER];
+//        lidos = -1;
+//
+//
+//        while ((lidos = inputStream.read(buffer, 0, TAMANHO_BUFFER)) != -1)
+//            outputStream.write(buffer, 0, lidos);
+//
+//        outputStream.flush();
 
-        System.out.println("FROM SERVER: " + modifiedSentence);
 
         clientSocket.close();
     }

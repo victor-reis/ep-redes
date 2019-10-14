@@ -8,7 +8,7 @@ import java.io.File;
 
 
 public class Main {
-    public static final String READ_PATH = "/home/victor-reis/Pictures/pés.jpg";
+    public static final String READ_PATH = "/home/victor-reis/Pictures/pés-server.jpg";
     public static final String WRITE_PATH = "/home/victor-reis/Pictures/";
     public static int COUNT = 0;
     public static final int WIDTH = 500;
@@ -22,6 +22,8 @@ public class Main {
         final Image img = recieveImageFromClient();
 
         BufferedImage tempJPG = null;
+
+        showImage((BufferedImage)img);
 
         tempJPG = imageEditor.resizeImage(img, WIDTH, HEIGHT);
 
@@ -43,7 +45,7 @@ public class Main {
         JFrame janela = new JFrame("ALGUMA IMAGEM");
 
         janela.add(painel);
-        janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        janela.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         janela.pack();
         janela.setLocation(15 + 100*COUNT,15 + 50*COUNT);
         janela.setVisible(true);
@@ -61,8 +63,8 @@ public class Main {
 
     private static void responseImageToClient(BufferedImage image) throws Exception {
         COUNT++;
-        File newFileJPG =  new File(WRITE_PATH + COUNT + "result-file.jpg");
-        try{ImageIO.write(image, "jpg", newFileJPG);}
+        File newFileJPG =  new File(WRITE_PATH + COUNT + "pés-server-edited.jpeg");
+        try{ImageIO.write(image, "jpeg", newFileJPG);}
         catch (Exception e){
             System.out.println("deu caquinha na escrita");
             throw e;

@@ -2,19 +2,21 @@ package client;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class Main {
+    public static final String READ_PATH = "/home/victor-reis/Pictures/pés.jpg";
+    public static final String WRITE_PATH = "/home/victor-reis/Pictures/";
+    public static int COUNT = 0;
+    public static final int WIDTH = 500;
+    public static final int HEIGHT = 500;
 
     public static void main(String[] args) throws Exception {
-        BufferedImage image = new BufferedImage(0,0,0);
 
-        BufferedImage result;
+        final File file = new File(READ_PATH);
+        TCPClient.sendImageToServer(file);
 
-        sendImageToServer(image);
-
-        result = recieveImageFromServer();
-
-    }
+       }
 
     private static void showImage(BufferedImage image){
         ImageIcon imageIcon = new ImageIcon(image);
@@ -31,10 +33,4 @@ public class Main {
         janela.setVisible(true);
     }
 
-    private static BufferedImage recieveImageFromServer(){
-        return new BufferedImage(0,0,0);
-    }
-
-    private static void sendImageToServer(BufferedImage image) throws Exception {
-    }
 }
