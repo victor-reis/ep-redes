@@ -12,18 +12,10 @@ class TCPServer {
 
     public static final int TAMANHO_BUFFER = 4096;
 
-    public static void main(String argv[]) throws Exception
+    public static void start() throws Exception
     {
 
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("insira o Nome do arquivo: ");
-        FILE_NAME = scanner.nextLine();
-
-        System.out.println("insira o Path do arquivo: ");
-        PATH = scanner.nextLine();
-
-        FILE_PATH = PATH + FILE_NAME;
+        getUserInputs();
 
         byte[] b = InetAddress.getByName("localhost").getAddress();
         System.out.println("[SERVER] started in: " + b[0] + "." + b[1] + "." + b[2] + "." + b[3]);
@@ -52,11 +44,23 @@ class TCPServer {
                     out.write(buffer, 0, lidos);
 
                 out.flush();
-                Main.main(argv);
+                Main.editImage();
                 System.out.println("[SERVER] Terminou edicao");
 
             }
         } catch (IOException e) {
         }
+    }
+
+    private static void getUserInputs() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("insira o Nome do arquivo: ");
+        FILE_NAME = scanner.nextLine();
+
+        System.out.println("insira o Path do arquivo: ");
+        PATH = scanner.nextLine();
+
+        FILE_PATH = PATH + FILE_NAME;
     }
 }

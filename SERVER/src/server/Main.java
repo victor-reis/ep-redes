@@ -19,7 +19,10 @@ public class Main {
 
 
     public static void main(String[] args) throws Exception {
+        TCPServer.start();
+    }
 
+    public static void editImage() throws Exception {
         final Image img = recieveImageFromClient();
 
         BufferedImage tempJPG = null;
@@ -33,7 +36,6 @@ public class Main {
         tempJPG = imageEditor.toBlackAndWhite(tempJPG);
 
         responseImageToClient(tempJPG);
-
     }
 
     private static void showImage(BufferedImage image){
