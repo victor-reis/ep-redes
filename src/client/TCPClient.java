@@ -3,27 +3,27 @@ package client;
 import java.io.*;
 import java.net.Socket;
 
+import static client.Main.IP_DO_SERVER;
+
 class TCPClient {
 
     public static final int TAMANHO_BUFFER = 4096;
 
     public static void sendImageToServer(File file) throws Exception
     {
-        File f = new File("/home/victor-reis/Pictures/pés.jpg");
-        FileInputStream in = new FileInputStream(f);
+        FileInputStream in = new FileInputStream(file);
 
-        Socket clientSocket = new Socket("localhost", 6789);
+        Socket clientSocket = new Socket(IP_DO_SERVER, 6789);
 
 
         OutputStream out = clientSocket.getOutputStream();
         OutputStreamWriter osw = new OutputStreamWriter(out);
-//
+
 //        InputStream inputStream = clientSocket.getInputStream();
 //        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 //
-
         BufferedWriter writer = new BufferedWriter(osw);
-        writer.write(f.getName() + "\n");
+        writer.write(file.getName() + "\n");
         writer.flush();
 
         byte[] buffer = new byte[TAMANHO_BUFFER];

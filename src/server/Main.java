@@ -8,8 +8,9 @@ import java.io.File;
 
 
 public class Main {
-    public static final String READ_PATH = "/home/victor-reis/Pictures/pés-server.jpg";
-    public static final String WRITE_PATH = "/home/victor-reis/Pictures/";
+    public static String PATH = "/home/victor-reis/Pictures/";
+    public static String FILE_NAME = "dog-server.jpg";
+    public static String FILE_PATH = PATH + FILE_NAME;
     public static int COUNT = 0;
     public static final int WIDTH = 500;
     public static final int HEIGHT = 500;
@@ -54,17 +55,18 @@ public class Main {
     private static Image recieveImageFromClient(){
         Image img = null;
         try {
-            img = ImageIO.read(new File(READ_PATH));
+            File f = new File(FILE_PATH);
+            img = ImageIO.read(f);
         } catch (Exception e) {
-            System.out.println("provavelmente O READ_PATH está errado");
+            System.out.println("provavelmente O FILE_PATH está errado");
         }
         return img;
     }
 
     private static void responseImageToClient(BufferedImage image) throws Exception {
         COUNT++;
-        File newFileJPG =  new File(WRITE_PATH + COUNT + "pés-server-edited.jpeg");
-        try{ImageIO.write(image, "jpeg", newFileJPG);}
+        File newFileJPG =  new File(PATH + COUNT + "-edited-" + FILE_NAME);
+        try{ImageIO.write(image, "jpg", newFileJPG);}
         catch (Exception e){
             System.out.println("deu caquinha na escrita");
             throw e;
