@@ -8,8 +8,8 @@ import java.io.File;
 
 
 public class Main {
-    public static String PATH = "/home/victor-reis/Pictures/";
-    public static String FILE_NAME = "dog-server.jpg";
+    public static String PATH = "/home/victor-reis/Music/";
+    public static String FILE_NAME = "image-in-server.jpg";
     public static String FILE_PATH = PATH + FILE_NAME;
     public static int COUNT = 0;
     public static final int WIDTH = 500;
@@ -23,19 +23,23 @@ public class Main {
     }
 
     public static void editImage() throws Exception {
-        final Image img = recieveImageFromClient();
+        final Image img = readImageRecievedFromClient();
 
-        BufferedImage tempJPG = null;
+        BufferedImage tempJPG = (BufferedImage)img;
 
-        showImage((BufferedImage)img);
+        saveImage(tempJPG);
+        showImage(tempJPG);
 
         tempJPG = imageEditor.resizeImage(img, WIDTH, HEIGHT);
 
-        responseImageToClient(tempJPG);
+        saveImage(tempJPG);
+        showImage(tempJPG);
 
         tempJPG = imageEditor.toBlackAndWhite(tempJPG);
 
-        responseImageToClient(tempJPG);
+        saveImage(tempJPG);
+        showImage(tempJPG);
+
     }
 
     private static void showImage(BufferedImage image){
@@ -54,7 +58,7 @@ public class Main {
         janela.setVisible(true);
     }
 
-    private static Image recieveImageFromClient(){
+    private static Image readImageRecievedFromClient(){
         Image img = null;
         try {
             File f = new File(FILE_PATH);
@@ -65,15 +69,13 @@ public class Main {
         return img;
     }
 
-    private static void responseImageToClient(BufferedImage image) throws Exception {
+    private static void saveImage(BufferedImage image) throws Exception {
         COUNT++;
-        File newFileJPG =  new File(PATH + COUNT + "-edited-" + FILE_NAME);
+        File newFileJPG =  new File(PATH + COUNT + FILE_NAME);
         try{ImageIO.write(image, "jpg", newFileJPG);}
         catch (Exception e){
             System.out.println("deu caquinha na escrita");
             throw e;
         }
-
-        showImage(image);
     }
 }

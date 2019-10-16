@@ -23,8 +23,6 @@ class TCPServer {
         try{
             ServerSocket welcomeSocket = new ServerSocket(6789);
 
-            System.out.println("Server up at: " + welcomeSocket.getInetAddress().getHostName() +" ---" + welcomeSocket.getInetAddress().getHostAddress());
-
             while(true) {
                 Socket clSocket = welcomeSocket.accept();
                 System.out.println("[SERVER] conection accepted with: " +clSocket.getInetAddress().getHostName());
@@ -55,10 +53,7 @@ class TCPServer {
     private static void getUserInputs() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("insira o Nome do arquivo: ");
-        FILE_NAME = scanner.nextLine();
-
-        System.out.println("insira o Path do arquivo: ");
+        System.out.println("insira o Path do arquivo: [ex: ' /home/victor-reis/Music/ ' ]");
         PATH = scanner.nextLine();
 
         FILE_PATH = PATH + FILE_NAME;

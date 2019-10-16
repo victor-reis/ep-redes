@@ -24,11 +24,11 @@ public class Main {
 
     private static void getUserInputs() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Qual o ip do servidor ? [Dica, se estiver rodando na mesma máquina, digite localhost]: ");
+        System.out.println("Qual o ip do servidor ? [Dica, se estiver rodando na mesma máquina, digite localhost ]: ");
         IP_DO_SERVER = scanner.nextLine();
-        System.out.println("Qual o nome do arquivo: ");
+        System.out.println("Qual o nome do arquivo: [ex: ' dog.jpg ' ]");
         FILE_NAME = scanner.nextLine();
-        System.out.println("insira o caminho para o arquivo: [ex: '/home/user/imagens/' ]");
+        System.out.println("insira o caminho para o arquivo: [ex: ' /home/victor-reis/Pictures/ ' ]");
         PATH = scanner.nextLine();
         READ_PATH = PATH + FILE_NAME;
     }
@@ -40,7 +40,7 @@ public class Main {
         JPanel painel = new JPanel();
         painel.add(jlabel);
 
-        JFrame janela = new JFrame("ALGUMA IMAGEM");
+        JFrame janela = new JFrame("file");
 
         janela.add(painel);
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
