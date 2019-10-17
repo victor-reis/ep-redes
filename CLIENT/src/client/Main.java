@@ -10,10 +10,7 @@ public class Main {
     public static String FILE_NAME = "dog.jpg";
     public static String READ_PATH = PATH + FILE_NAME;
     public static String IP_DO_SERVER = "localhost";
-
-    public static int COUNT = 0;
-    public static final int WIDTH = 500;
-    public static final int HEIGHT = 500;
+    public static String DIMENSION = "50x50";
 
     public static void main(String[] args) throws Exception {
         getUserInputs();
@@ -26,10 +23,12 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Qual o ip do servidor ? [Dica, se estiver rodando na mesma máquina, digite localhost ]: ");
         IP_DO_SERVER = scanner.nextLine();
-        System.out.println("Qual o nome do arquivo: [ex: ' dog.jpg ' ]");
-        FILE_NAME = scanner.nextLine();
         System.out.println("insira o caminho para o arquivo: [ex: ' /home/victor-reis/Pictures/ ' ]");
         PATH = scanner.nextLine();
+        System.out.println("Qual o nome do arquivo: [ex: ' dog.jpg ' ]");
+        FILE_NAME = scanner.nextLine();
+        System.out.println("Qual é a dimensão do arquivo? [ex: ' 500x500 ' ]");
+        DIMENSION = scanner.nextLine();
         READ_PATH = PATH + FILE_NAME;
     }
 

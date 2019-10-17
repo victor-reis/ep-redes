@@ -3,6 +3,7 @@ package client;
 import java.io.*;
 import java.net.Socket;
 
+import static client.Main.DIMENSION;
 import static client.Main.IP_DO_SERVER;
 
 class TCPClient {
@@ -24,6 +25,9 @@ class TCPClient {
 //
         BufferedWriter writer = new BufferedWriter(osw);
         writer.write(file.getName() + "\n");
+        writer.flush();
+
+        writer.write(DIMENSION + "\n");
         writer.flush();
 
         byte[] buffer = new byte[TAMANHO_BUFFER];

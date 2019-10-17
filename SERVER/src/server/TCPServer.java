@@ -31,7 +31,10 @@ class TCPServer {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
                 String fName = reader.readLine();
-                System.out.println(fName);
+                System.out.println("Nome do arquivo: " + fName);
+
+                readSizeOfCrop(reader);
+
                 File f1 = new File(FILE_PATH);
                 FileOutputStream out = new FileOutputStream(f1);
 
@@ -42,6 +45,9 @@ class TCPServer {
                     out.write(buffer, 0, lidos);
 
                 out.flush();
+
+                Thread.sleep(1000);
+
                 Main.editImage();
                 System.out.println("[SERVER] Terminou edicao");
 
@@ -50,10 +56,20 @@ class TCPServer {
         }
     }
 
+    private static void readSizeOfCrop(BufferedReader reader) throws IOException {
+        String dimensions = reader.readLine();
+
+        String[] dimension = dimensions.split("x");
+        WIDTH = Integer.parseInt(dimension[0]);
+        HEIGHT = Integer.parseInt(dimension[1]);
+
+        System.out.println("dimensoes do arquivo:\n  -" + dimension[0] + " de largura\n  -" + dimension[1] + " de altura");
+    }
+
     private static void getUserInputs() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("insira o Path do arquivo: [ex: ' /home/victor-reis/Music/ ' ]");
+        System.out.println("insira o Path para salvar o arquivo: [ex: ' /home/victor-reis/Music/ ' ]");
         PATH = scanner.nextLine();
 
         FILE_PATH = PATH + FILE_NAME;

@@ -1,5 +1,7 @@
 package server;
 
+import sun.awt.image.BufImgSurfaceData;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +14,8 @@ public class Main {
     public static String FILE_NAME = "image-in-server.jpg";
     public static String FILE_PATH = PATH + FILE_NAME;
     public static int COUNT = 0;
-    public static final int WIDTH = 500;
-    public static final int HEIGHT = 500;
+    public static int WIDTH = 500;
+    public static int HEIGHT = 500;
 
     private static imageEditor imageEditor = new imageEditor();
 
@@ -27,7 +29,6 @@ public class Main {
 
         BufferedImage tempJPG = (BufferedImage)img;
 
-        saveImage(tempJPG);
         showImage(tempJPG);
 
         tempJPG = imageEditor.resizeImage(img, WIDTH, HEIGHT);
