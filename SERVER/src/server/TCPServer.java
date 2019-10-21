@@ -1,77 +1,138 @@
 package server;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-import static server.Main.*;
+import static java.lang.String.*;
 
 class TCPServer {
 
-    public static final int TAMANHO_BUFFER = 4096;
+    private static final int TAMANHO_BUFFER = 4096;
 
-    public static void start() throws Exception
+    ServerSocket welcomeSocket;
+    String path;
+    ImageEditor imageEditor = new ImageEditor();
+
+
+    public void upServer(){
+        try {
+            this.welcomeSocket = new ServerSocket(6789);
+            byte[] b = InetAddress.getByName("localhost").getAddress();
+            System.out.println("[SERVER] started in -> " + b[0] + "." + b[1] + "." + b[2] + "." + b[3]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    void startAplication() throws Exception
     {
-
-        getUserInputs();
-
-        byte[] b = InetAddress.getByName("localhost").getAddress();
-        System.out.println("[SERVER] started in: " + b[0] + "." + b[1] + "." + b[2] + "." + b[3]);
-
         try{
-            ServerSocket welcomeSocket = new ServerSocket(6789);
-
             while(true) {
+                String operation;
+
                 Socket clSocket = welcomeSocket.accept();
-                System.out.println("[SERVER] conection accepted with: " +clSocket.getInetAddress().getHostName());
+                System.out.println("[SERVER] Conexão aceita com -> " +clSocket.getInetAddress().getHostName());
 
-                InputStream in = clSocket.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                InputStream inputStream = clSocket.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-                String fName = reader.readLine();
-                System.out.println("Nome do arquivo: " + fName);
+                operation = reader.readLine();
+                System.out.println("[SERVER] Operação recebida -> " + operation);
 
-                readSizeOfCrop(reader);
-
-                File f1 = new File(FILE_PATH);
-                FileOutputStream out = new FileOutputStream(f1);
-
-                byte[] buffer = new byte[TAMANHO_BUFFER];
-                int lidos = -1;
-
-                while ((lidos = in.read(buffer, 0, TAMANHO_BUFFER)) != -1)
-                    out.write(buffer, 0, lidos);
-
-                out.flush();
-
-                Thread.sleep(1000);
-
-                Main.editImage();
-                System.out.println("[SERVER] Terminou edicao");
-
+                switch(operation) {
+                    case("enviar"):
+                    receiveAnImage(clSocket, reader);
+                    break;
+                    case("solicitar"):
+                    sendAnImage(clSocket, reader);
+                    break;
+                    default:
+                        System.out.println(format("[SERVER] A operação %s não é válida", operation));
+                }
             }
         } catch (IOException e) {
         }
     }
 
-    private static void readSizeOfCrop(BufferedReader reader) throws IOException {
+    private void receiveAnImage(Socket clSocket, BufferedReader reader) throws Exception {
+        byte[] buffer = new byte[TAMANHO_BUFFER];
+        int lidos = -1;
+        InputStream inputStream = clSocket.getInputStream();
+
+        imageEditor.FILE_NAME = reader.readLine();
+        System.out.println("[SERVER] Nome do arquivo -> " + imageEditor.FILE_NAME);
+
+        readSizeOfCrop(imageEditor,reader);
+        imageEditor.setFilePath(imageEditor.PATH,imageEditor.FILE_NAME);
+
+        File f1 = new File(imageEditor.FILE_PATH);
+        FileOutputStream fileOutputStream = new FileOutputStream(f1);
+
+        while ((lidos = inputStream.read(buffer, 0, TAMANHO_BUFFER)) != -1)
+            fileOutputStream.write(buffer, 0, lidos);
+
+        fileOutputStream.flush();
+        fileOutputStream.close();
+
+        imageEditor.editImage();
+        System.out.println("[SERVER] Terminou edicao");
+    }
+
+    private void sendAnImage(Socket clSocket, BufferedReader reader) throws Exception {
+        byte[] buffer = new byte[TAMANHO_BUFFER];
+        int lidos = -1;
+
+        String fileName = reader.readLine();
+
+        System.out.println(format("[SERVER] está sendo requisitado -> %s",fileName));
+
+        OutputStream outputStream = clSocket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(outputStream);
+        BufferedWriter writer = new BufferedWriter(osw);
+
+        String editedFileName = format("bw-%s",fileName);
+        writeToServer(writer,editedFileName);
+
+        System.out.println(format("[SERVER] responderá o nome do arquivo como -> %s", editedFileName));
+
+        File f1 = new File (ImageEditor.PATH + editedFileName);
+
+        FileInputStream in = new FileInputStream(f1);
+
+
+        while ((lidos = in.read(buffer, 0, TAMANHO_BUFFER)) != -1)
+            outputStream.write(buffer, 0, lidos);
+
+        outputStream.flush();
+
+        System.out.println("[SERVER] arquivo enviado");
+    }
+
+    private void readSizeOfCrop(ImageEditor imageEditor, BufferedReader reader) throws IOException {
         String dimensions = reader.readLine();
 
         String[] dimension = dimensions.split("x");
-        WIDTH = Integer.parseInt(dimension[0]);
-        HEIGHT = Integer.parseInt(dimension[1]);
+        imageEditor.WIDTH = Integer.parseInt(dimension[0]);
+        imageEditor.HEIGHT = Integer.parseInt(dimension[1]);
 
-        System.out.println("dimensoes do arquivo:\n  -" + dimension[0] + " de largura\n  -" + dimension[1] + " de altura");
+        System.out.println("[SERVER] dimensoes do arquivo ->\n  - " + dimension[0] + "px de largura\n  - " + dimension[1] + "px de altura\n");
     }
 
-    private static void getUserInputs() {
+    void getUserInputs() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("insira o Path para salvar o arquivo: [ex: ' /home/victor-reis/Music/ ' ]");
-        PATH = scanner.nextLine();
+        System.out.println("[SERVER] insira o Path para salvar o arquivo: [ex: ' /home/victor-reis/Music/ ' ]");
+        imageEditor.PATH = scanner.nextLine();
+    }
 
-        FILE_PATH = PATH + FILE_NAME;
+    private void writeToServer(BufferedWriter writer, String text) throws IOException {
+        writer.write(text + "\n");
+        writer.flush();
     }
 }
