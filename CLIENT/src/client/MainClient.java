@@ -6,13 +6,12 @@ import java.io.File;
 import java.util.Scanner;
 
 public class MainClient {
-    public static String PATH = "/home/victor-reis/Pictures/";
-    public static String FILE_NAME = "dog.jpg";
-    public static String READ_PATH = PATH + FILE_NAME;
-    public static String IP_DO_SERVER = "localhost";
-    public static String DIMENSION = "500x500";
-    public static String OPERATION = "enviar";
-//    public static String OPERATION = "solicitar";
+    public static String PATH ;
+    public static String FILE_NAME ;
+    public static String READ_PATH ;
+    public static String IP_DO_SERVER ;
+    public static String DIMENSION ;
+    public static String OPERATION ;
 
     public static void main(String[] args) throws Exception {
         getUserInputs();

@@ -1,14 +1,12 @@
 package server;
 
-import com.sun.xml.internal.ws.util.StringUtils;
-
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
 class TCPServer {
 
@@ -80,8 +78,13 @@ class TCPServer {
         fileOutputStream.flush();
         fileOutputStream.close();
 
-        imageEditor.editImage();
-        System.out.println("[SERVER] Terminou edicao");
+        try{imageEditor.editImage();
+            System.out.println("[SERVER] Terminou edicao");
+        }
+        catch (Exception e){
+            System.out.println("[SERVER] houve falha na edição da imagem, por favor reenvie a imagem");
+            e.printStackTrace();
+        }
     }
 
     private void sendAnImage(Socket clSocket, BufferedReader reader) throws Exception {

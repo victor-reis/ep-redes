@@ -13,12 +13,12 @@ import java.io.File;
  */
 
 class ImageEditor {
-    public static String PATH = "/home/victor-reis/Music/";
-    public String FILE_NAME = "image-in-server.jpg";
-    public String FILE_PATH = PATH + FILE_NAME;
+    public static String PATH ;
+    public String FILE_NAME ;
+    public String FILE_PATH ;
     public int COUNT = 0;
-    public int WIDTH = 500;
-    public int HEIGHT = 500;
+    public int WIDTH ;
+    public int HEIGHT ;
 
     /**
      * This function resize the image file and returns the BufferedImage object that can be saved to file system.
